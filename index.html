@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Wikipedia Viewer</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" type="text/css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<link rel="stylesheet" href="css/style.css">
+
+	<script>
+		function search() {
+			var input = $("input").val();
+			$("li").hide();
+			$.getJSON("https://cors-anywhere.herokuapp.com/https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&generator=search&exsentences=1&exintro=1&explaintext=1&gsrlimit=10&gsrsearch=" + encodeURIComponent(input), function(result) {
+				var i=0;
+				for(obj in result.query.pages){
+					var article = result.query.pages[obj];
+					var li = $("#s"+i);
+					li.html("<h4>" + article.title + "</h4>" + article.extract);
+					li.parent().attr("href", "https://en.wikipedia.org/wiki?curid=" + article.pageid)
+					li.show();
+					i++;
+				}
+			});
+			$("h1").hide(600)
+		}
+
+		$(document).ready(function() {
+			$("#random").click(function() {
+				window.open('https://en.wikipedia.org/wiki/Special:Random');
+			});
+			$("li").hide();
+			$("#search").click(function() {
+				search();
+			});
+			$("input").keypress(function(event) {
+				if(event.which == 13 && $("input").val().length > 0) {
+					search();
+				} else if (event.which == 13) {
+					$("h1").show(600);
+					$("li").hide();
+				}
+			})
+		});
+	</script>
+</head>
+<body>
+	<div class="text-center main">
+		<h1>Wikipedia Viewer</h1>
+		<a id="random" href="#">Click here for a random article</a><br>
+		<div class="input-group">
+			<input type="text" class="form-control drop-down-toggle" placeholder="Search for...">
+			<span class="input-group-btn">
+				<button id="search" class="btn btn-primary" type="button">Search</button>
+			</span>
+		</div>
+		<ul>
+			<a href="#" target="_blank"><li id="s0" ></li></a>
+			<a href="#" target="_blank"><li id="s1" ></li></a>
+			<a href="#" target="_blank"><li id="s2" ></li></a>
+			<a href="#" target="_blank"><li id="s3" ></li></a>
+			<a href="#" target="_blank"><li id="s4" ></li></a>
+			<a href="#" target="_blank"><li id="s5" ></li></a>
+			<a href="#" target="_blank"><li id="s6" ></li></a>
+			<a href="#" target="_blank"><li id="s7" ></li></a>
+			<a href="#" target="_blank"><li id="s8" ></li></a>
+			<a href="#" target="_blank"><li id="s9" ></li></a>
+		</ul>
+	</div>
+</body>
+</html>
